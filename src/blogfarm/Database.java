@@ -10,7 +10,6 @@ public class Database {
     
     private final String host, username, password;
     private String[][] results;
-    //private Statement stmt;
     private Connection con;
     
     public Database(String phost, String pusername, String ppassword){ 
