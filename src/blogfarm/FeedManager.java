@@ -9,6 +9,9 @@ public class FeedManager extends JDialog {
 
     public FeedManager(){
         
+        Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
+        db.connect();
+        
         JPanel content = new JPanel();
         JPanel contentFirstRow = new JPanel();
         JPanel contentList = new JPanel();
@@ -18,12 +21,13 @@ public class FeedManager extends JDialog {
         JButton btnAdd = new JButton("Add Feed");
         JButton btnDelete = new JButton("Delete Feed");
         
-        String[] testdata = new String[]{"One","Two","Three","One","Two",
-            "Three","One","Two","Three","One","Two","Three","One","Two",
-            "Three","One","Two","Three","One","Two","Three","One","Two",
-            "Three","One","Two","Three","One","Two","Three"};
+        String[][] listDataToConvert = db.execSelectQuery("SELECT FEEDURL FROM TBLFEED");
+        String[] listData = new String[listDataToConvert.length];
+        for(int i = 0; i < listDataToConvert.length; i++){
+            listData[i] = listDataToConvert[i][0];
+        }
         
-        JList listFeed = new JList(testdata);
+        JList listFeed = new JList(listData);
         JScrollPane listScroller = new JScrollPane(listFeed);
         
         JTextField txtFeedURL = new JTextField();

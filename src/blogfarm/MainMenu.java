@@ -9,8 +9,8 @@ public class MainMenu extends JFrame {
     
     public MainMenu(){
        
-        Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
-        db.connect();
+        //Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
+        //db.connect();
         
         JButton btnFeedURL = new JButton("Feed Manager");
         
@@ -20,8 +20,8 @@ public class MainMenu extends JFrame {
             }
         };
         
-        String SQL = "SELECT ARTICLETEXT from TBLARTICLE";
-        db.execSelectQuery(SQL);
+        //String SQL = "SELECT ARTICLETEXT from TBLARTICLE";
+        //db.execSelectQuery(SQL);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
