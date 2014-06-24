@@ -9,6 +9,9 @@ public class MainMenu extends JFrame {
     
     public MainMenu(){
        
+        Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
+        db.connect();
+        
         JButton btnFeedURL = new JButton("Feed Manager");
         
         ActionListener action = (ActionEvent e) -> {
@@ -16,6 +19,9 @@ public class MainMenu extends JFrame {
                 FeedManager feedmgr = new FeedManager();
             }
         };
+        
+        String SQL = "SELECT ARTICLETEXT from TBLARTICLE";
+        db.execSelectQuery(SQL);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
