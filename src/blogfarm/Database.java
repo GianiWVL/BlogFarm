@@ -26,6 +26,14 @@ public class Database {
         }
     }
     
+    public void close(){
+        try{
+            this.con.close();
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public String[][] execSelectQuery(String pSQL){
         String SQL = pSQL;
         

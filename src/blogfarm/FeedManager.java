@@ -85,6 +85,9 @@ public class FeedManager extends JDialog {
         db.connect();
         
         String[][] listDataToConvert = db.execSelectQuery("SELECT FEEDURL FROM TBLFEED");
+        
+        db.close();
+        
         this.listData = new String[listDataToConvert.length];
         for(int i = 0; i < listDataToConvert.length; i++){
             this.listData[i] = listDataToConvert[i][0];
