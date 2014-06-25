@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 public class FeedManager extends JDialog {
 
     private String[] listData;
+    private JList listFeed;
     
     public FeedManager(){
-        
         
         JPanel content = new JPanel();
         JPanel contentFirstRow = new JPanel();
@@ -21,9 +21,7 @@ public class FeedManager extends JDialog {
         JButton btnAdd = new JButton("Add Feed");
         JButton btnDelete = new JButton("Delete Feed");
         
-        //db.execInsertQuery("INSERT INTO TBLFEED(FEEDURL,FEEDID) VALUES('haha',2)");
-        
-        JList listFeed = new JList(listData);
+        loadListbox();
         JScrollPane listScroller = new JScrollPane(listFeed);
         
         JTextField txtFeedURL = new JTextField();
@@ -49,9 +47,9 @@ public class FeedManager extends JDialog {
         btnDelete.setActionCommand("Delete");
         btnDelete.addActionListener(action);
                
-        listFeed.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listFeed.setLayoutOrientation(JList.VERTICAL);
-        listFeed.setVisibleRowCount(10);
+        this.listFeed.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.listFeed.setLayoutOrientation(JList.VERTICAL);
+        this.listFeed.setVisibleRowCount(10);
         
         contentFirstRow.setLayout(new BoxLayout(contentFirstRow, BoxLayout.LINE_AXIS));
         
@@ -91,5 +89,6 @@ public class FeedManager extends JDialog {
         for(int i = 0; i < listDataToConvert.length; i++){
             this.listData[i] = listDataToConvert[i][0];
         }
+        this.listFeed = new JList(listData);
     }
 }
