@@ -7,10 +7,10 @@ import java.awt.event.ActionListener;
 
 public class FeedManager extends JDialog {
 
+    private String[] listData;
+    
     public FeedManager(){
         
-        Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
-        db.connect();
         
         JPanel content = new JPanel();
         JPanel contentFirstRow = new JPanel();
@@ -21,11 +21,7 @@ public class FeedManager extends JDialog {
         JButton btnAdd = new JButton("Add Feed");
         JButton btnDelete = new JButton("Delete Feed");
         
-        String[][] listDataToConvert = db.execSelectQuery("SELECT FEEDURL FROM TBLFEED");
-        String[] listData = new String[listDataToConvert.length];
-        for(int i = 0; i < listDataToConvert.length; i++){
-            listData[i] = listDataToConvert[i][0];
-        }
+        //db.execInsertQuery("INSERT INTO TBLFEED(FEEDURL,FEEDID) VALUES('haha',2)");
         
         JList listFeed = new JList(listData);
         JScrollPane listScroller = new JScrollPane(listFeed);
@@ -83,7 +79,17 @@ public class FeedManager extends JDialog {
         add(content,BorderLayout.NORTH);        
         
         pack();
-        setVisible(true);
-               
+        setVisible(true);          
+    }
+    
+    private void loadListbox(){
+        Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
+        db.connect();
+        
+        String[][] listDataToConvert = db.execSelectQuery("SELECT FEEDURL FROM TBLFEED");
+        this.listData = new String[listDataToConvert.length];
+        for(int i = 0; i < listDataToConvert.length; i++){
+            this.listData[i] = listDataToConvert[i][0];
+        }
     }
 }

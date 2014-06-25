@@ -60,4 +60,15 @@ public class Database {
         }
         return this.results;
     }
+    
+    public void execInsertQuery(String pSQL){
+        String SQL = pSQL;
+        try{
+            Statement stmt = this.con.createStatement();
+            stmt.execute(SQL);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
 }
