@@ -10,7 +10,8 @@ public class FeedManager extends JDialog {
     private String[] listData;
     private JList listFeed;
     private JScrollPane listScroller;
-    private JPanel contentList = new JPanel();
+    private final JPanel contentList = new JPanel();
+    private final JTextField txtFeedURL = new JTextField();
     
     public FeedManager(){
         
@@ -24,7 +25,7 @@ public class FeedManager extends JDialog {
         
         loadListbox();  
         
-        JTextField txtFeedURL = new JTextField();
+        
         JLabel lblFeedURL = new JLabel("Feed URL:");
         
         this.setPreferredSize(new Dimension(500,255));
@@ -39,6 +40,7 @@ public class FeedManager extends JDialog {
                     break;
                 case "AddFeed":
                     System.out.println("hah");
+                    addFeed();
                     break;
                 case "Delete":
                     break;
@@ -72,6 +74,7 @@ public class FeedManager extends JDialog {
         
         this.contentList.setLayout(new BoxLayout(contentList,BoxLayout.PAGE_AXIS));      
         
+        //ToDo make method to reload ui
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
         content.add(contentFirstRow);
         content.add(contentList);
@@ -105,6 +108,16 @@ public class FeedManager extends JDialog {
             this.listFeed.setLayoutOrientation(JList.VERTICAL);
             this.listFeed.setVisibleRowCount(10);
             this.contentList.add(listScroller);
+        }
+    }
+    
+    private void addFeed(){
+        if(txtFeedURL.getText().length() != 0){
+            Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
+            db.connect();
+            db.execInsertQuery("INSERT INTO TBLFEED(FEEDURL) VALUES('"+ txtFeedURL.getText() +"')");
+            db.close();
+            loadListbox();
         }
     }
 }
