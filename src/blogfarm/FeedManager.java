@@ -8,26 +8,27 @@ import java.awt.event.ActionListener;
 public class FeedManager extends JDialog {
 
     private String[] listData;
-    private JList listFeed;
-    private JScrollPane listScroller;
-    private final JPanel contentList = new JPanel();
-    private final JTextField txtFeedURL = new JTextField();
     
+    private JList listFeed;
+    
+    private JScrollPane listScroller;
+    
+    private JPanel contentList = new JPanel();
+    private JPanel content = new JPanel();
+    private final JTextField txtFeedURL = new JTextField();    
+    private final JPanel contentFirstRow = new JPanel();
+    private final JPanel contentButtons = new JPanel();
+    
+    private final JLabel lblFeedURL = new JLabel("Feed URL:");
+    
+    private final JButton btnOK = new JButton("OK");
+    private final JButton btnAdd = new JButton("Add Feed");
+    private final JButton btnDelete = new JButton("Delete Feed");
+        
     public FeedManager(){
-        
-        JPanel content = new JPanel();
-        JPanel contentFirstRow = new JPanel();
-        JPanel contentButtons = new JPanel();
-        
-        JButton btnOK = new JButton("OK");
-        JButton btnAdd = new JButton("Add Feed");
-        JButton btnDelete = new JButton("Delete Feed");
-        
+
         loadListbox();  
-        
-        
-        JLabel lblFeedURL = new JLabel("Feed URL:");
-        
+
         this.setPreferredSize(new Dimension(500,255));
         this.setResizable(false);
         this.setSize(500, 500);
@@ -48,42 +49,47 @@ public class FeedManager extends JDialog {
             }
         };
 
-        btnOK.setActionCommand("OK");
-        btnOK.addActionListener(action);
+        this.btnOK.setActionCommand("OK");
+        this.btnOK.addActionListener(action);
         
-        btnAdd.setActionCommand("AddFeed");
-        btnAdd.addActionListener(action);
+        this.btnAdd.setActionCommand("AddFeed");
+        this.btnAdd.addActionListener(action);
                 
-        btnDelete.setActionCommand("Delete");
-        btnDelete.addActionListener(action);
+        this.btnDelete.setActionCommand("Delete");
+        this.btnDelete.addActionListener(action);
   
-        contentFirstRow.setLayout(new BoxLayout(contentFirstRow, BoxLayout.LINE_AXIS));
+        this.contentFirstRow.setLayout(new BoxLayout(this.contentFirstRow, BoxLayout.LINE_AXIS));
         
-        contentFirstRow.add(Box.createHorizontalGlue());
-        contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
-        contentFirstRow.add(lblFeedURL);
-        contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
-        contentFirstRow.add(txtFeedURL);
-        contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
-        contentFirstRow.add(btnAdd);
+        this.contentFirstRow.add(Box.createHorizontalGlue());
+        this.contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
+        this.contentFirstRow.add(lblFeedURL);
+        this.contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
+        this.contentFirstRow.add(this.txtFeedURL);
+        this.contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
+        this.contentFirstRow.add(btnAdd);
         
-        contentButtons.setLayout(new BoxLayout(contentButtons, BoxLayout.LINE_AXIS));
-        contentButtons.add(btnOK);
-        contentButtons.add(Box.createRigidArea(new Dimension(5, 0)));
-        contentButtons.add(btnDelete);
+        this.contentButtons.setLayout(new BoxLayout(this.contentButtons, BoxLayout.LINE_AXIS));
+        this.contentButtons.add(btnOK);
+        this.contentButtons.add(Box.createRigidArea(new Dimension(5, 0)));
+        this.contentButtons.add(btnDelete);
+
+        buildLayout();                  
+    }
+    
+    private void buildLayout(){
+        this.getContentPane().removeAll();
         
-        this.contentList.setLayout(new BoxLayout(contentList,BoxLayout.PAGE_AXIS));      
+        this.content = new JPanel();
+        this.content.setLayout(new BoxLayout(this.content, BoxLayout.PAGE_AXIS));
+        this.content.add(this.contentFirstRow);
+        this.content.add(this.contentList);
+        this.content.add(this.contentButtons);
         
-        //ToDo make method to reload ui
-        content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-        content.add(contentFirstRow);
-        content.add(contentList);
-        content.add(contentButtons);
-        
-        add(content,BorderLayout.NORTH);        
+        add(this.content);
         
         pack();
-        setVisible(true);          
+        setVisible(true);
+        
     }
     
     private void loadListbox(){
@@ -102,11 +108,16 @@ public class FeedManager extends JDialog {
                 this.listData[i] = listDataToConvert[i][0];
             }
             
+            this.contentList = new JPanel();
+            this.contentList.setLayout(new BoxLayout(contentList,BoxLayout.PAGE_AXIS));
+            
             this.listFeed = new JList(listData);
             this.listScroller = new JScrollPane(this.listFeed);
+            
             this.listFeed.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             this.listFeed.setLayoutOrientation(JList.VERTICAL);
             this.listFeed.setVisibleRowCount(10);
+            
             this.contentList.add(listScroller);
         }
     }
@@ -117,7 +128,10 @@ public class FeedManager extends JDialog {
             db.connect();
             db.execInsertQuery("INSERT INTO TBLFEED(FEEDURL) VALUES('"+ txtFeedURL.getText() +"')");
             db.close();
+            
             loadListbox();
+            
+            buildLayout();
         }
     }
 }
