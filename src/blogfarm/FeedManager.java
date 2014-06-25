@@ -9,20 +9,20 @@ public class FeedManager extends JDialog {
 
     private String[] listData;
     private JList listFeed;
+    private JScrollPane listScroller;
+    private JPanel contentList = new JPanel();
     
     public FeedManager(){
         
         JPanel content = new JPanel();
         JPanel contentFirstRow = new JPanel();
-        JPanel contentList = new JPanel();
         JPanel contentButtons = new JPanel();
         
         JButton btnOK = new JButton("OK");
         JButton btnAdd = new JButton("Add Feed");
         JButton btnDelete = new JButton("Delete Feed");
         
-        loadListbox();
-        JScrollPane listScroller = new JScrollPane(listFeed);
+        loadListbox();  
         
         JTextField txtFeedURL = new JTextField();
         JLabel lblFeedURL = new JLabel("Feed URL:");
@@ -32,10 +32,18 @@ public class FeedManager extends JDialog {
         this.setSize(500, 500);
 
         ActionListener action = (ActionEvent e) -> {
-            if("OK".equals(e.getActionCommand())){
-                this.dispose();
+            if(null != e.getActionCommand()){
+                switch (e.getActionCommand()) {
+                case "OK":
+                    this.dispose();
+                    break;
+                case "AddFeed":
+                    System.out.println("hah");
+                    break;
+                case "Delete":
+                    break;
+                }
             }
-            System.out.println(e.getActionCommand());
         };
 
         btnOK.setActionCommand("OK");
@@ -46,11 +54,7 @@ public class FeedManager extends JDialog {
                 
         btnDelete.setActionCommand("Delete");
         btnDelete.addActionListener(action);
-               
-        this.listFeed.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        this.listFeed.setLayoutOrientation(JList.VERTICAL);
-        this.listFeed.setVisibleRowCount(10);
-        
+  
         contentFirstRow.setLayout(new BoxLayout(contentFirstRow, BoxLayout.LINE_AXIS));
         
         contentFirstRow.add(Box.createHorizontalGlue());
@@ -66,8 +70,7 @@ public class FeedManager extends JDialog {
         contentButtons.add(Box.createRigidArea(new Dimension(5, 0)));
         contentButtons.add(btnDelete);
         
-        contentList.setLayout(new BoxLayout(contentList,BoxLayout.PAGE_AXIS));
-        contentList.add(listScroller);
+        this.contentList.setLayout(new BoxLayout(contentList,BoxLayout.PAGE_AXIS));      
         
         content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
         content.add(contentFirstRow);
@@ -88,10 +91,20 @@ public class FeedManager extends JDialog {
         
         db.close();
         
-        this.listData = new String[listDataToConvert.length];
-        for(int i = 0; i < listDataToConvert.length; i++){
-            this.listData[i] = listDataToConvert[i][0];
+        if(listDataToConvert != null){
+
+            this.listData = new String[listDataToConvert.length];
+            
+            for(int i = 0; i < listDataToConvert.length; i++){
+                this.listData[i] = listDataToConvert[i][0];
+            }
+            
+            this.listFeed = new JList(listData);
+            this.listScroller = new JScrollPane(this.listFeed);
+            this.listFeed.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            this.listFeed.setLayoutOrientation(JList.VERTICAL);
+            this.listFeed.setVisibleRowCount(10);
+            this.contentList.add(listScroller);
         }
-        this.listFeed = new JList(listData);
     }
 }
