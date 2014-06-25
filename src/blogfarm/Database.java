@@ -45,7 +45,7 @@ public class Database {
             int columns = rs.getMetaData().getColumnCount();
             int rows = rs.getRow();
             
-            System.out.println(rows + " " + columns);
+            //System.out.println(rows + " " + columns);
             rs.beforeFirst();
             
             if(columns > 1 && rows > 0){
@@ -53,14 +53,14 @@ public class Database {
                 while(rs.next()){
                     for(int i = 1; i <= columns; i++){
                         results[rs.getRow()-1][i-1] = rs.getString(i);
-                        System.out.println(rs.getString(i));
+                        //System.out.println(rs.getString(i));
                     }
                 }               
             }else if(columns == 1 && rows > 0){
                 this.results = new String[rows][1];
                 while(rs.next()){
                     results[rs.getRow()-1][0] = rs.getString(1);
-                    System.out.println(rs.getString(1));
+                    //System.out.println(rs.getString(1));
                 }
             }           
         }catch(SQLException e){
@@ -70,6 +70,16 @@ public class Database {
     }
     
     public void execInsertQuery(String pSQL){
+        String SQL = pSQL;
+        try{
+            Statement stmt = this.con.createStatement();
+            stmt.execute(SQL);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void execDeleteQuery(String pSQL){
         String SQL = pSQL;
         try{
             Statement stmt = this.con.createStatement();

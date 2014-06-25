@@ -39,11 +39,12 @@ public class FeedManager extends JDialog {
                 case "OK":
                     this.dispose();
                     break;
-                case "AddFeed":
-                    System.out.println("hah");
+                case "AddFeed":                   
                     addFeed();
+                    txtFeedURL.setText("");
                     break;
                 case "Delete":
+                    removeFromList(this.listFeed.getSelectedValue().toString());
                     break;
                 }
             }
@@ -62,16 +63,16 @@ public class FeedManager extends JDialog {
         
         this.contentFirstRow.add(Box.createHorizontalGlue());
         this.contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
-        this.contentFirstRow.add(lblFeedURL);
+        this.contentFirstRow.add(this.lblFeedURL);
         this.contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
         this.contentFirstRow.add(this.txtFeedURL);
         this.contentFirstRow.add(Box.createRigidArea(new Dimension(5, 0)));
-        this.contentFirstRow.add(btnAdd);
+        this.contentFirstRow.add(this.btnAdd);
         
         this.contentButtons.setLayout(new BoxLayout(this.contentButtons, BoxLayout.LINE_AXIS));
-        this.contentButtons.add(btnOK);
+        this.contentButtons.add(this.btnOK);
         this.contentButtons.add(Box.createRigidArea(new Dimension(5, 0)));
-        this.contentButtons.add(btnDelete);
+        this.contentButtons.add(this.btnDelete);
 
         buildLayout();                  
     }
@@ -133,5 +134,16 @@ public class FeedManager extends JDialog {
             
             buildLayout();
         }
+    }
+    
+    private void removeFromList(String item){
+        Database db = new Database("jdbc:derby://localhost:1527/BlogFarm","Giani","lekismeki");
+        db.connect();
+        db.execDeleteQuery("DELETE FROM TBLFEED WHERE FEEDURL = '"+ item + "'");
+        db.close();
+        
+        loadListbox();
+            
+        buildLayout();
     }
 }
